@@ -6,11 +6,19 @@ from apps.User.serializers import AuthorizationSerializer, RegistrationSerialize
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.urls import reverse
 from django.core.mail import EmailMessage
+
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "You're logged in!"})
 
 
 class AuthorizationViewAPI(APIView):
@@ -43,16 +51,16 @@ class ResetPassword(generics.GenericAPIView):
     serializer_class = EmailSerializer
 
     def post(self, request):
-        """
-        Create token.
-        """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        
         email = serializer.data["email"]
         user = CustomUser.objects.filter(email=email).first()
+        
         if user:
             encoded_pk = urlsafe_base64_encode(force_bytes(user.pk))
             token = PasswordResetTokenGenerator().make_token(user)
+            
             reset_url = reverse(
                 "reset-password",
                 kwargs={"encoded_pk": encoded_pk, "token": token},
@@ -61,6 +69,7 @@ class ResetPassword(generics.GenericAPIView):
 
             subject = f'Link to reset your password'
             message = f'Link : {reset_link}'
+            
             email = EmailMessage(subject, message, to=(email,))
             email.send()
 
@@ -79,20 +88,15 @@ class ResetPassword(generics.GenericAPIView):
 
 
 class ResetPasswordAPI(generics.GenericAPIView):
-    """
-    Verify and Reset Password Token View.
-    """
 
     serializer_class = ResetPasswordSerializer
 
     def patch(self, request, *args, **kwargs):
-        """
-        Verify token & encoded_pk and then reset the password.
-        """
         serializer = self.serializer_class(
             data=request.data, context={"kwargs": kwargs}
         )
         serializer.is_valid(raise_exception=True)
+        
         return Response(
             {"message": "Password reset complete"},
             status=status.HTTP_200_OK,
