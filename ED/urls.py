@@ -23,6 +23,7 @@ from apps.User.views import ResetPassword, ResetPasswordAPI
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('apps.User.urls')),
+    path('api/v1/', include('apps.Post.urls')),
 
     path('api/token/create/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
