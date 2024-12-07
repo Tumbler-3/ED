@@ -35,19 +35,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 
 class ResetPasswordSerializer(serializers.Serializer):
-    """
-    Reset Password Serializer.
-    """
-
     password = serializers.CharField()
 
     class Meta:
         field = ("password")
 
     def validate(self, data):
-        """
-        Verify token and encoded_pk and then set new password.
-        """
         password = data.get("password")
         token = self.context.get("kwargs").get("token")
         encoded_pk = self.context.get("kwargs").get("encoded_pk")
