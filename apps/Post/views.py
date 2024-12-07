@@ -6,6 +6,7 @@ from apps.Post.models import PostModel, PostImageModel
 from apps.Post.serializers import PostSerializer, PostDetailSerializer, PostImageSerializer
 from apps.Post.permissions import IsAuthor
 from django.shortcuts import get_object_or_404
+from apps.Post.permissions import decode_token
 
 
 class PostViewAPI(ListCreateAPIView):
@@ -32,11 +33,16 @@ class ImagePostViewAPI(ListCreateAPIView):
     
     def create(self, request, *args, **kwargs):
         try:
-            request.headers.get('Authorization').split(' ')[1]
+            token = request.headers.get('Authorization').split(' ')[1]
         except:
             raise serializers.ValidationError({"detail": "Authentication credentials were not provided."})
         
+        decoded = decode_token(token)
+        token_id = decoded['user_id']
         post = get_object_or_404(PostModel, id=self.kwargs['id'])
+
+        if token_id != post.author.pk:
+            raise serializers.ValidationError({"detail": "Authentication credentials were not provided."})
         
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
