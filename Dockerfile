@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "gunicorn", "ED.wsgi", "-b", "0.0.0.0:8000"]
+ENTRYPOINT [ "gunicorn", "ED.wsgi", "-b", "0.0.0.0:6800"]
