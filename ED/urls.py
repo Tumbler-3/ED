@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from apps.User.views import ResetPassword, ResetPasswordAPI
+from apps.Post.views import main
 from django.views.static import serve 
 from ED import settings
 
 urlpatterns = [
+    path('', main),
     path('admin/', admin.site.urls),
     path('api/v1/', include('apps.User.urls')),
     path('api/v1/', include('apps.Post.urls')),

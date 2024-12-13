@@ -9,6 +9,9 @@ from django.shortcuts import get_object_or_404
 from apps.Post.permissions import decode_token
 
 
+def main(request):
+    return Response(template_name='main.html')
+
 class PostViewAPI(ListCreateAPIView):
     permission_classes = [IsAuthor,]
     queryset = PostModel.objects.all()
