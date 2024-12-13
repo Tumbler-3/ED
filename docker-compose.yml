@@ -16,7 +16,7 @@ services:
       - DJANGO_SETTINGS_MODULE=ED.settings
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+             python manage.py runserver 44.226.145.213:8000"
              
   db:
     image: postgres:15
