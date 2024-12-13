@@ -14,7 +14,8 @@ COPY ./requirements.txt /app/
 RUN pip install -r requirements.txt
 
 
-COPY . /app
+COPY ./app /app  
+WORKDIR /app
 RUN python manage.py collectstatic --noinput
 RUN python manage.py makemigrations --noinput
 RUN python manage.py migrate --noinput
