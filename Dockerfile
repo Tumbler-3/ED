@@ -2,16 +2,17 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+# install system dependencies
+RUN apt-get update
+
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt /app/
+RUN pip install -r requirements.txt
+
 COPY . /app
 
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
-
-ENV PYTHONUNBUFFERED=1
-ENV DJANGO_SETTINGS_MODULE=ED.settings
-
-RUN mkdir -p /app/media
-
-EXPOSE 8000
-
-CMD ["python", "manage.py", "runserver", "44.226.145.213:8000"]
+ENTRYPOINT [ "gunicorn", "ED.wsgi", "-b", "0.0.0.0:8000"]
