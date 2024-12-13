@@ -7,7 +7,7 @@ from apps.Post.serializers import PostSerializer, PostDetailSerializer, PostImag
 from apps.Post.permissions import IsAuthor
 from django.shortcuts import get_object_or_404, render
 from apps.Post.permissions import decode_token
-d
+
 def main(request):
     return render(request, 'main')
 
