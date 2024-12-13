@@ -14,5 +14,6 @@ COPY ./requirements.txt /app/
 RUN pip install -r requirements.txt
 
 COPY . /app
+RUN python manage.py collectstatic --noinput
 
 ENTRYPOINT [ "gunicorn", "ED.wsgi", "-b", "0.0.0.0:6800"]
