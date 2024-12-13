@@ -5,12 +5,11 @@ from rest_framework import status
 from apps.Post.models import PostModel, PostImageModel
 from apps.Post.serializers import PostSerializer, PostDetailSerializer, PostImageSerializer
 from apps.Post.permissions import IsAuthor
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from apps.Post.permissions import decode_token
 
-
 def main(request):
-    return Response(template_name='main.html')
+    return render(request, 'main')
 
 class PostViewAPI(ListCreateAPIView):
     permission_classes = [IsAuthor,]
