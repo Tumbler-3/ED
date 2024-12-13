@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from apps.Post.permissions import decode_token
 
 def main(request):
-    return render(request, 'main')
+    return render(request, 'main.html')
 
 class PostViewAPI(ListCreateAPIView):
     permission_classes = [IsAuthor,]
