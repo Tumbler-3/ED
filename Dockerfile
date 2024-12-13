@@ -14,10 +14,10 @@ COPY ./requirements.txt /app/
 RUN pip install -r requirements.txt
 
 
-COPY ./app /app  
+COPY . /app
 WORKDIR /app
 RUN python manage.py collectstatic --noinput
 RUN python manage.py makemigrations --noinput
-RUN python manage.py migrate --noinput
+RUN python manage.py migrate 
 
 ENTRYPOINT [ "gunicorn", "ED.wsgi", "-b", "0.0.0.0:6800"]
