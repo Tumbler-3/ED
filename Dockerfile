@@ -12,6 +12,8 @@ RUN apt-get update
 RUN pip install --upgrade pip
 COPY ./requirements.txt /app/
 RUN pip install -r requirements.txt
+RUN python manage.py makemigrations \
+    && python manage.py migrate
 
 COPY . /app
 RUN python manage.py collectstatic --noinput
