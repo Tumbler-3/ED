@@ -39,7 +39,7 @@ class RegistrationViewAPI(APIView):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         CustomUser.objects.create_user(**serializer.validated_data)
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED, data={'status': 'you are registered'})
 
 
 def logout_view(request):

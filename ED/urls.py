@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     
-    path("reset",ResetPassword.as_view(),name="request-password-reset"),
+    path("reset/",ResetPassword.as_view(),name="request-password-reset"),
     path("password-reset/<str:encoded_pk>/<str:token>/",ResetPasswordAPI.as_view(),name="reset-password"),
     
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),

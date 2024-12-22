@@ -1,4 +1,4 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
@@ -7,6 +7,8 @@ from apps.Post.serializers import PostSerializer, PostDetailSerializer, PostImag
 from apps.Post.permissions import IsAuthor
 from django.shortcuts import get_object_or_404, render
 from apps.Post.permissions import decode_token
+from apps.User.models import CustomUser
+
 
 def main(request):
     return render(request, 'main.html')
@@ -15,6 +17,17 @@ class PostViewAPI(ListCreateAPIView):
     permission_classes = [IsAuthor,]
     queryset = PostModel.objects.all()
     serializer_class = PostSerializer
+    
+
+class AuthorPostViewAPI(ListAPIView):
+    permission_classes = [IsAuthor,]
+    serializer_class = PostSerializer
+    lookup_field = 'id'
+    
+    def get_queryset(self):
+        id = self.kwargs['id']
+        author = CustomUser.objects.get(id=id)
+        return PostModel.objects.filter(author=author)
 
 
 class PostDetailViewAPI(RetrieveUpdateDestroyAPIView):
